@@ -43,7 +43,7 @@ namespace ApiJwtEfOracle.Controllers
         }
 
         [HttpPost("Refresh")]
-        public async Task<IActionResult> Refresh([FromBody] TokenRequest request)
+        public async Task<IActionResult> Refresh(TokenRequest request)
         {
             var user = await _jwtTokenService.CheckRefreshTokenAsync(request.RefreshToken);
 
