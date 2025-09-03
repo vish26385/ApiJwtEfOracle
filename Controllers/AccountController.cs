@@ -2,6 +2,7 @@
 using ApiJwtEfOracle.Repositories;
 using ApiJwtEfOracle.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApiJwtEfOracle.Controllers
 {
@@ -37,7 +38,21 @@ namespace ApiJwtEfOracle.Controllers
             if (user == null) return Unauthorized( new { success = false, message = "Invalid username or password." });
 
             var (token, exp) = _jwtTokenService.CreateToken(user);
-            return Ok(new AuthResponse{ Token = token, ExpiresAt = exp, Username = user.Username });
+            var refreshtoken = await _jwtTokenService.CreateAndStoreRefreshTokenAsync(user);
+            return Ok(new AuthResponse{ Token = token, ExpiresAt = exp, Username = user.Username, RefreshToken = refreshtoken });
+        }
+
+        [HttpPost("Refresh")]
+        public async Task<IActionResult> Refresh([FromBody] TokenRequest request)
+        {
+            var user = await _jwtTokenService.CheckRefreshTokenAsync(request.RefreshToken);
+
+            if (user == null)
+                return Unauthorized("Invalid refresh token");
+
+            var (token, exp) = _jwtTokenService.CreateToken(user);
+            var newRefreshToken = await _jwtTokenService.CreateAndStoreRefreshTokenAsync(user);
+            return Ok(new AuthResponse { Token = token, ExpiresAt = exp, Username = user.Username, RefreshToken = newRefreshToken });
         }
     }
 }

@@ -1,7 +1,10 @@
 ﻿using ApiJwtEfOracle.Models;
+using ApiJwtEfOracle.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace ApiJwtEfOracle.Services
@@ -10,9 +13,11 @@ namespace ApiJwtEfOracle.Services
     {
 
         private readonly IConfiguration _configuration;
-        public JwtTokenService(IConfiguration configuration) 
+        private readonly IAuthRepository _authRepository;
+        public JwtTokenService(IConfiguration configuration, IAuthRepository authRepository) 
         {
             _configuration = configuration;
+            _authRepository = authRepository;
         }    
 
         public (string token, DateTime expiresAt) CreateToken(User user)
@@ -38,6 +43,21 @@ namespace ApiJwtEfOracle.Services
             );
 
             return (new JwtSecurityTokenHandler().WriteToken(token), expires);
+        }
+
+        public async Task<string> CreateAndStoreRefreshTokenAsync(User user)
+        {
+            var refreshtoken = await _authRepository.CreateAndStoreRefreshTokenAsync(user);
+            return refreshtoken;
+        }
+
+        public async Task<User?> CheckRefreshTokenAsync(string refreshToken)
+        {
+            var user = await _authRepository.CheckRefreshTokenAsync(refreshToken);
+            if (user == null || user.RefreshTokenExpiryTime <= DateTime.Now)
+                return null;
+            else
+                return user;
         }
     }
 }   

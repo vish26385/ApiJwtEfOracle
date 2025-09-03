@@ -60,5 +60,24 @@ namespace ApiJwtEfOracle.Repositories
             var userId = p.Get<int>(":p_user_id");
             return await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == userId);
         }
+
+        public async Task<string> CreateAndStoreRefreshTokenAsync(User user)
+        {
+            var randomNumber = new byte[32];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+
+            user.RefreshToken = Convert.ToBase64String(randomNumber);
+            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+            _context.Entry(user).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return Convert.ToBase64String(randomNumber);
+        }
+
+        public async Task<User?> CheckRefreshTokenAsync(string refreshToken)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.RefreshToken == refreshToken);
+            return user;
+        }
     }
 }

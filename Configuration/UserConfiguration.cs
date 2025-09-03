@@ -15,6 +15,8 @@ namespace ApiJwtEfOracle.Configuration
             builder.Property(x => x.PasswordHash).HasColumnName("PASSWORD_HASH");
             builder.Property(x => x.PasswordSalt).HasColumnName("PASSWORD_SALT");
             builder.Property(x => x.CreatedAt).HasColumnName("CREATED_AT");
+            builder.Property(x => x.RefreshToken).HasColumnName("REFRESH_TOKEN");
+            builder.Property(x => x.RefreshTokenExpiryTime).HasColumnName("REFRESH_TOKEN_EXP_TIME");
         }
     }
 }

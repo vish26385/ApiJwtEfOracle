@@ -6,5 +6,7 @@ namespace ApiJwtEfOracle.Repositories
     {
         Task<int> RegisterAsync(string username, string password);
         Task<User?> AuthenticateAsync(string username, string password);
+        Task<string> CreateAndStoreRefreshTokenAsync(User user);
+        Task<User?> CheckRefreshTokenAsync(string refreshToken);
     }
 }
