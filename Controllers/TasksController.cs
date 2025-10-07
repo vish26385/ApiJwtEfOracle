@@ -12,7 +12,7 @@ namespace ApiJwtEfOracle.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]  // Require login
-    public class TasksController : Controller
+    public class TasksController : ControllerBase
     {
         private readonly AppDbContext _context;
 
@@ -46,7 +46,7 @@ namespace ApiJwtEfOracle.Controllers
         }
 
         [HttpGet("GetTask/{id}")]
-        public async Task<ActionResult<Task?>> GetProduct(int id)
+        public async Task<ActionResult<Task?>> GetTask(int id)
         {
             var task = await _context.Tasks.FindAsync(id); 
             if (task == null)
