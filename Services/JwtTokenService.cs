@@ -29,9 +29,9 @@ namespace ApiJwtEfOracle.Services
 
             var claims = new List<Claim>
             {
+                new Claim("uid", user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("uid", user.Id.ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())               
             };   
 
             var token = new JwtSecurityToken(

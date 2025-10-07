@@ -1,6 +1,7 @@
 ﻿using ApiJwtEfOracle.Data;
 using ApiJwtEfOracle.Models;
 using Microsoft.EntityFrameworkCore;
+using Task = System.Threading.Tasks.Task;
 
 namespace ApiJwtEfOracle.Repositories
 {

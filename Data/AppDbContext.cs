@@ -1,6 +1,7 @@
 ﻿using ApiJwtEfOracle.Configuration;
 using ApiJwtEfOracle.Models;
 using Microsoft.EntityFrameworkCore;
+using Task = ApiJwtEfOracle.Models.Task;
 
 namespace ApiJwtEfOracle.Data
 {
@@ -13,6 +14,7 @@ namespace ApiJwtEfOracle.Data
         // public DbSet<YourEntity> YourEntities { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Task> Tasks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,6 +29,7 @@ namespace ApiJwtEfOracle.Data
             //});
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new TaskConfiguration());
         }
     }
 }

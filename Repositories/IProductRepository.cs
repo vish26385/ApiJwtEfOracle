@@ -1,5 +1,6 @@
 ﻿using ApiJwtEfOracle.Models;
 using Microsoft.AspNetCore.Mvc;
+using Task = System.Threading.Tasks.Task;
 
 namespace ApiJwtEfOracle.Repositories
 {
